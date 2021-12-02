@@ -1,0 +1,2 @@
+add revealAll function
+add win game logic
