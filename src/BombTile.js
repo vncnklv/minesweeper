@@ -10,7 +10,7 @@ export class BombTile extends Tile {
     createElement() {
         const tile = super.createElement();
         tile.addEventListener('click', this.reveal.bind(this));
-        // tile.style.background = 'red';
+        tile.style.background = 'red';
         return tile;
     }
 

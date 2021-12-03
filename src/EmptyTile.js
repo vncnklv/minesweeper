@@ -18,6 +18,7 @@ export class EmptyTile extends Tile {
             if (dispatchEvent) this.element.dispatchEvent(new CustomEvent('emptyrevealed', { detail: this, bubbles: true }));
             this.state = 1;
             this.element.classList.add('revealed');
+            
             if (this.nearBombs > 0) {
                 this.element.textContent = this.nearBombs
                 switch (this.nearBombs) {

@@ -7,54 +7,44 @@ export class Game {
         this.height = height;
         this.dificultity = dificultity;
         this.board = null;
+        this.tiles = [];
     }
 
     generateTiles() {
-        const tiles = [];
-
-        let bomb = 0;
-        let empty = 0;
-
         for (let h = 0; h < this.height; h++) {
             for (let w = 0; w < this.width; w++) {
                 const coef = Math.random() * 10;
 
                 if (coef < this.dificultity) {
-                    tiles.push(new BombTile(w, h));
-                    bomb++;
+                    this.tiles.push(new BombTile(w, h));
                 } else {
-                    tiles.push(new EmptyTile(w, h));
-                    empty++;
+                    this.tiles.push(new EmptyTile(w, h));
                 }
             }
         }
 
-        tiles.forEach(t => {
+        this.tiles.forEach(t => {
             if (t instanceof EmptyTile) {
-                t.nearBombs = nBombsNear(tiles, t);
+                t.nearBombs = nBombsNear(this.tiles, t);
             }
         })
-
-        return tiles;
     }
 
     init() {
         this.board = document.createElement('table');
         this.board.classList.add('board');
 
-        const tiles = this.generateTiles();
+        this.generateTiles();
 
-        this.board.addEventListener('emptyrevealed', this.emptyRevealed.bind(this, tiles));
-        this.board.addEventListener('bombrevealed', this.bombRevealed.bind(this, tiles));
+        this.board.addEventListener('emptyrevealed', this.emptyRevealed.bind(this));
+        this.board.addEventListener('bombrevealed', this.bombRevealed.bind(this));
 
         for (let h = 0; h < this.height; h++) {
             const row = document.createElement('tr');
             for (let w = 0; w < this.width; w++) {
                 const td = document.createElement('td');
 
-                const tile = tiles.find(
-                    (t) => t.position.x == w && t.position.y == h
-                );
+                const tile = this.tiles.find(t => t.position.x == w && t.position.y == h);
 
                 td.append(tile.element);
                 row.append(td);
@@ -62,36 +52,37 @@ export class Game {
 
             this.board.append(row);
         }
-
-        return tiles;
     }
 
-    bombRevealed(tiles) {
+    bombRevealed() {
         this.board.removeEventListener('bombrevealed', this.bombRevealed, false);
 
-        tiles.forEach((t) => {
-            if (t instanceof BombTile) {
-                t.reveal(false);
-            }
+        this.tiles.forEach((t) => {
+            t.reveal(false);
         });
+
+        console.log('You Lose');
     }
 
-    emptyRevealed(tiles, event) {
+    emptyRevealed(event) {
         const targetTile = event.detail;
 
-        if(targetTile.nearBombs > 0) {
+        if (targetTile.nearBombs > 0) {
             targetTile.reveal(false);
-            return;
+        } else {
+            this.tiles.forEach(t => {
+                if (t instanceof EmptyTile && t.state == 0 && areAdjacent(targetTile, t)) {
+                    t.reveal(false);
+
+                    if (t.nearBombs == 0) {
+                        this.emptyRevealed({ detail: t });
+                    }
+
+                }
+            })
         }
 
-        for (const t of tiles) {
-            if (t instanceof EmptyTile && t.state == 0 && areAdjacent(targetTile, t)) {
-                t.reveal(false);
-                if (t.nearBombs == 0) {
-                    this.emptyRevealed(tiles, { detail: t });
-                }
-            }
-        }
+        console.log(this.checkForWin());
     }
 
     display(field) {
@@ -100,6 +91,10 @@ export class Game {
         }
 
         field.append(this.board);
+    }
+
+    checkForWin() {
+        return !this.tiles.some(t => t instanceof EmptyTile && t.state == 0);
     }
 }
 

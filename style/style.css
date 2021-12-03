@@ -1,10 +1,6 @@
-#startBtn {
+.btn {
     width: 500px;
     height: 75px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     background-color: #a1a1a1;
     border-radius: 5px;
@@ -15,9 +11,18 @@
     font-size: x-large;
 }
 
-#startBtn:hover {
+.btn:hover {
     cursor: pointer;
     background-color: #cccccc;
+}
+
+* form {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .tile {

@@ -1,13 +1,29 @@
 import { Game } from './Game.js';
 
-const startBtn = document.getElementById('startBtn');
-startBtn.addEventListener('click', init);
+const form = document.querySelector('form');
+form.addEventListener('submit', init);
 
-let tiles = null;
+function init(e) {
+    e.preventDefault();
 
-function init() {
-    const g = new Game(15, 25);
-    tiles = g.init();
+    const formData = new FormData(form);
+    let width = Number(formData.get('width'))
+    let height = Number(formData.get('height'));
+
+    if (width <= 0) {
+        width = 10;
+    }
+
+    if (height <= 0) {
+        height = 15;
+    }
+
+    const g = new Game(width, height);
+    g.init();
     g.display(document.querySelector('body'));
-    startBtn.remove();
+
+    console.log(g);
+
+    form.reset();
+    form.remove();
 }

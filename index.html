@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Minesweeper</title>
 
-        <link rel="stylesheet" href="style/style.css" />
-        <script type="module" src="src/app.js" defer></script>
-    </head>
-    <body>
-        <button id="startBtn">new game</button>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Minesweeper</title>
+
+    <link rel="stylesheet" href="style/style.css" />
+    <script type="module" src="src/app.js" defer></script>
+</head>
+
+<body>
+    <form>
+        <label for="width">Width: <input type="number" name="width"></label>
+        <label for="height">Height: <input type="number" name="height"></label>
+        <input type="submit" id="startBtn" class="btn" value="NEW GAME"/>
+    </form>
+</body>
+
 </html>
