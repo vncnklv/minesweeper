@@ -82,7 +82,7 @@ export class Game {
             })
         }
 
-        console.log(this.checkForWin());
+        if(this.checkForWin() == true) console.log("You win!");
     }
 
     display(field) {
@@ -110,13 +110,8 @@ function nBombsNear(tiles, tile) {
     let bombs = 0;
 
     tiles.forEach(t => {
-        if ((t.position.x == tile.position.x || t.position.x == tile.position.x + 1 || t.position.x == tile.position.x - 1) &&
-            (t.position.y == tile.position.y || t.position.y == tile.position.y + 1 || t.position.y == tile.position.y - 1) &&
-            t != tile) {
-
-            if (t instanceof BombTile) {
-                bombs++;
-            }
+        if (areAdjacent(t, tile) && t instanceof BombTile) {
+            bombs++;
         }
     });
 

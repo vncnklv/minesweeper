@@ -22,8 +22,6 @@ function init(e) {
     g.init();
     g.display(document.querySelector('body'));
 
-    console.log(g);
-
     form.reset();
     form.remove();
 }
